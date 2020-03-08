@@ -3,11 +3,11 @@ package pt.rodrigorar.caches;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import pt.rodrigorar.api.Cache;
 import pt.rodrigorar.api.CacheConfiguration;
 import pt.rodrigorar.api.EntryNotFoundException;
+import pt.rodrigorar.policies.Policy;
 
-public class SimpleCache<K, V> implements Cache<K, V> {
+public class SimpleCache<K, V> implements InternalCache<K, V> {
     private final CacheConfiguration configuration;
     private final ConcurrentMap<K, Entry<V>> data;
 
@@ -48,5 +48,19 @@ public class SimpleCache<K, V> implements Cache<K, V> {
             Entry<V> entry = data.get(key);
             data.remove(entry);
         }
+    }
+
+    @Override
+    public CacheConfiguration getConfiguration() {
+        return this.configuration;
+    }
+
+    @Override
+    public synchronized void evict(Policy<V> policy) {
+        data.forEach((key, value) -> {
+            if (policy.evaluate(value)) {
+                data.remove(value);
+            }
+        });
     }
 }
