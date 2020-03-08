@@ -5,9 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import pt.rodrigorar.api.CacheConfiguration;
 import pt.rodrigorar.api.EntryNotFoundException;
-import pt.rodrigorar.api.FactoryCache;
-import pt.rodrigorar.api.UnknownCacheType;
 import pt.rodrigorar.policies.Policy;
+import pt.rodrigorar.utils.Validator;
 
 public class SimpleCache<K, V> implements InternalCache<K, V> {
     private final CacheConfiguration configuration;
@@ -20,6 +19,9 @@ public class SimpleCache<K, V> implements InternalCache<K, V> {
 
     @Override
     public synchronized V put(K key, V value) {
+        Validator.notNull(key);
+        Validator.notNull(value);
+
         final Entry<V> result;
         if (data.containsKey(key)) {
             result = data.get(key);
@@ -33,6 +35,8 @@ public class SimpleCache<K, V> implements InternalCache<K, V> {
 
     @Override
     public synchronized Optional<V> fetch(K key) {
+        Validator.notNull(key);
+
         final V result;
         if (data.containsKey(key)) {
             result = data.get(key).getValue();
@@ -44,6 +48,8 @@ public class SimpleCache<K, V> implements InternalCache<K, V> {
 
     @Override
     public synchronized void invalidate(K key) throws EntryNotFoundException {
+        Validator.notNull(key);
+
         if (! data.containsKey(key)) {
             throw new EntryNotFoundException("Entry not found for key " + key.toString());
         } else {
@@ -59,6 +65,8 @@ public class SimpleCache<K, V> implements InternalCache<K, V> {
 
     @Override
     public synchronized void evict(Policy<V> policy) {
+        Validator.notNull(policy);
+
         data.forEach((key, value) -> {
             if (policy.evaluate(value)) {
                 data.remove(value);
