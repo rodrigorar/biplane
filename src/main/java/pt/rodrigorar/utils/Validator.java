@@ -7,4 +7,10 @@ public class Validator {
             throw new NullPointerException();
         }
     }
+
+    public static void checkState(boolean state) {
+        if (! state) {
+            throw new IllegalStateException();
+        }
+    }
 }
