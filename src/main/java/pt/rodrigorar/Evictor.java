@@ -2,10 +2,11 @@ package pt.rodrigorar;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimerTask;
 import pt.rodrigorar.caches.InternalCache;
 import pt.rodrigorar.policies.TimeBasedEvictionPolicy;
 
-public class Evictor {
+public class Evictor extends TimerTask {
     private final List<InternalCache<?, ?>> caches;
 
     public Evictor() {
@@ -16,7 +17,8 @@ public class Evictor {
         this.caches.add(cache);
     }
 
-    public void evictFromAllCaches() {
+    @Override
+    public void run() {
         for (InternalCache<?, ?> cache : caches) {
             cache.evict(new TimeBasedEvictionPolicy<>(cache.getConfiguration()));
         }

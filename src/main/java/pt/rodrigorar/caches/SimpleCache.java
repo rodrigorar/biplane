@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import pt.rodrigorar.api.CacheConfiguration;
 import pt.rodrigorar.api.EntryNotFoundException;
+import pt.rodrigorar.api.FactoryCache;
+import pt.rodrigorar.api.UnknownCacheType;
 import pt.rodrigorar.policies.Policy;
 
 public class SimpleCache<K, V> implements InternalCache<K, V> {
