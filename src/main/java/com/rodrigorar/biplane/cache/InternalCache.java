@@ -14,8 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 **/
 
-package com.rodrigorar.eviction;
+package com.rodrigorar.biplane.cache;
 
-public interface Policy<V> {
-	boolean evaluate(V value);
+import java.util.Map;
+import java.util.Optional;
+
+interface InternalCache<K, V> {	
+	void put(K key, Entry<V> value);
+	Optional<Entry<V>> get(K key);
+	void remove(K key);
+	void evict();
+	Map<K, Entry<V>> entries();
+	CacheConfiguration getConfiguration();
 }

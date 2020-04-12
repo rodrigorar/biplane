@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 **/
 
-package com.rodrigorar.cache;
+package com.rodrigorar.biplane.cache;
 
 import java.time.Instant;
 
-class Entry<V> {
+public class Entry<V> {
 	private final V _value;
 	private final Instant _creationTime;
 	private Instant _lastAccessTime;

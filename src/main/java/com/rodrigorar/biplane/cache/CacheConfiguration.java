@@ -14,10 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 **/
 
-package com.rodrigorar.cache;
+package com.rodrigorar.biplane.cache;
 
-public interface Cache<K, V> {
-	void put(K key, V value);
-	V get(K key);
-	void remove(K key);
+import com.rodrigorar.biplane.eviction.Policy;
+
+class CacheConfiguration<V> {
+	private Policy<V> _evictionPolicy;
+	private int _maxEntries;
+	
+	CacheConfiguration(Policy<V> evictionPolicy, int maxEntries) {
+		_evictionPolicy = evictionPolicy;
+		_maxEntries = maxEntries;
+	}
+	
+	Policy<V> getEvictionPolicy() {
+		return _evictionPolicy;
+	}
+	
+	int getMaxEntries() {
+		return _maxEntries;
+	}
 }
