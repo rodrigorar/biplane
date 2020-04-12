@@ -14,12 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 **/
 
-package com.rodrigorar.cache;
+package com.rodrigorar.eviction;
 
-import java.util.Map;
-
-interface InternalCache<K, V> extends Cache<K, Entry<V>> {
-	Map<K, V> entries();
-	CacheConfiguration getConfiguration();
-	void evict(K key);
+public interface Policy<V> {
+	boolean evaluate(V value);
 }

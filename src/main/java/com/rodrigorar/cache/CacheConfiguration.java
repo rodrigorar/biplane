@@ -16,10 +16,22 @@ limitations under the License.
 
 package com.rodrigorar.cache;
 
-import java.util.Map;
+import com.rodrigorar.eviction.Policy;
 
-interface InternalCache<K, V> extends Cache<K, Entry<V>> {
-	Map<K, V> entries();
-	CacheConfiguration getConfiguration();
-	void evict(K key);
+class CacheConfiguration<V> {
+	private Policy<V> _evictionPolicy;
+	private int _maxEntries;
+	
+	CacheConfiguration(Policy<V> evictionPolicy, int maxEntries) {
+		_evictionPolicy = evictionPolicy;
+		_maxEntries = maxEntries;
+	}
+	
+	Policy<V> getEvictionPolicy() {
+		return _evictionPolicy;
+	}
+	
+	int getMaxEntries() {
+		return _maxEntries;
+	}
 }
