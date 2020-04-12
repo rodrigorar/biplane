@@ -18,8 +18,11 @@ package com.rodrigorar.cache;
 
 import java.util.Map;
 
-interface InternalCache<K, V> extends Cache<K, Entry<V>> {
-	Map<K, V> entries();
+interface InternalCache<K, V> {	
+	void put(K key, Entry<V> value);
+	Entry<V> get(K key);
+	void remove(K key);
+	Map<K, Entry<V>> entries();
 	CacheConfiguration getConfiguration();
 	void evict(K key);
 }
