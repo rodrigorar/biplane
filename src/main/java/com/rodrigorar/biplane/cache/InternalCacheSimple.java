@@ -56,6 +56,8 @@ class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 	
 	@Override
 	public void remove(K key) {
+		Validator.isNotNull(key);
+
 		if (_entryMap.containsKey(key)) {
 			_entryMap.remove(key);
 		}
@@ -67,7 +69,7 @@ class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 		Set<Map.Entry<K, Entry<V>>> entrySet = _entryMap.entrySet();
 		_entryMap.forEach((k, v) -> {
 			if (evictionPolicy.evaluate(v)) {
-				_entryMap.remove(v);
+				_entryMap.remove(k);
 			}
 		});
 	}

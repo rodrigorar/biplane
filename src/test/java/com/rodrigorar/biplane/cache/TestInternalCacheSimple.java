@@ -17,9 +17,12 @@ limitations under the License.
 package com.rodrigorar.biplane.cache;
 
 import com.rodrigorar.biplane.eviction.Policy;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class TestInternalCacheSimple {
@@ -36,122 +39,159 @@ public class TestInternalCacheSimple {
 	
 	@Test
 	public void testPutSuccess() {
-		final CacheConfiguration mockedConfiguration =
-				new CacheConfiguration(new Policy<String>() {
-					@Override
-					public boolean evaluate(Entry<String> value) {
-						return true;
-					}
-				}, 100);
-
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
 		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
 		underTest.put(KEY_1, VALUE_1);
 		underTest.put(KEY_2, VALUE_2);
 		underTest.put(KEY_3, VALUE_3);
 
 		final Optional<Entry<String>> entry1 = underTest.get(KEY_1);
-		Assertions.assertNotNull(entry1);
-		Assertions.assertTrue(entry1.isPresent());
-		Assertions.assertEquals(VALUE_1.value(), entry1.get().value());
+		Assert.assertNotNull(entry1);
+		Assert.assertTrue(entry1.isPresent());
+		Assert.assertEquals(VALUE_1.value(), entry1.get().value());
 
 		final Optional<Entry<String>> entry2 = underTest.get(KEY_2);
-		Assertions.assertNotNull(entry2);
-		Assertions.assertTrue(entry2.isPresent());
-		Assertions.assertEquals(VALUE_2.value(), entry2.get().value());
+		Assert.assertNotNull(entry2);
+		Assert.assertTrue(entry2.isPresent());
+		Assert.assertEquals(VALUE_2.value(), entry2.get().value());
 
 		final Optional<Entry<String>> entry3 = underTest.get(KEY_3);
-		Assertions.assertNotNull(entry3);
-		Assertions.assertTrue(entry3.isPresent());
-		Assertions.assertEquals(VALUE_3.value(), entry3.get().value());
+		Assert.assertNotNull(entry3);
+		Assert.assertTrue(entry3.isPresent());
+		Assert.assertEquals(VALUE_3.value(), entry3.get().value());
+
+		Mockito.verifyNoMoreInteractions(mockedConfiguration);
 	}
 	
-	@Test
+	@Test (expected = IllegalArgumentException.class)
 	public void testPutNullKey() {
-		final CacheConfiguration mockedConfiguration =
-				new CacheConfiguration(new Policy<String>() {
-					@Override
-					public boolean evaluate(Entry<String> value) {
-						return true;
-					}
-				}, 100);
-
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
 		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
-		Assertions.assertThrows(IllegalArgumentException.class, () -> underTest.put(KEY_NULL, VALUE_1));
+		underTest.put(KEY_NULL, VALUE_1);
 	}
 	
-	@Test
+	@Test (expected = IllegalArgumentException.class)
 	public void testPutNullValue() {
-		final CacheConfiguration mockedConfiguration =
-				new CacheConfiguration(new Policy<String>() {
-					@Override
-					public boolean evaluate(Entry<String> value) {
-						return true;
-					}
-				}, 100);
-
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
 		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
-		Assertions.assertThrows(IllegalArgumentException.class, () -> underTest.put(KEY_1, VALUE_NULL));
+		underTest.put(KEY_1, VALUE_NULL);
 	}
 	
 	// get
 	
-	@Test
+	@Test (expected = IllegalArgumentException.class)
 	public void testGetNullKey() {
-		final CacheConfiguration mockedConfiguration =
-				new CacheConfiguration(new Policy<String>() {
-					@Override
-					public boolean evaluate(Entry<String> value) {
-						return true;
-					}
-				}, 100);
-
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
 		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
-		Assertions.assertThrows(IllegalArgumentException.class, () -> underTest.get(KEY_NULL));
+		underTest.get(KEY_NULL);
 	}
 	
 	@Test
 	public void testGetNoEntry() {
-		final CacheConfiguration mockedConfiguration =
-				new CacheConfiguration(new Policy<String>() {
-					@Override
-					public boolean evaluate(Entry<String> value) {
-						return true;
-					}
-				}, 100);
-
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
 		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
 		Optional<Entry<String>> result = underTest.get(KEY_1);
 
-		Assertions.assertNotNull(result);
-		Assertions.assertFalse(result.isPresent());
+		Assert.assertNotNull(result);
+		Assert.assertFalse(result.isPresent());
 	}
 	
 	// remove
 	
 	@Test
 	public void testRemoveSuccess() {
-		// TODO: Not implemented
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		underTest.put(KEY_1, VALUE_1);
+		underTest.put(KEY_2, VALUE_2);
+		underTest.put(KEY_3, VALUE_3);
+
+		Optional key2Result = underTest.get(KEY_2);
+		Assert.assertNotNull(key2Result);
+		Assert.assertTrue(key2Result.isPresent());
+		Assert.assertEquals(VALUE_2, key2Result.get());
+
+		underTest.remove(KEY_2);
+		Optional result = underTest.get(KEY_2);
+		Assert.assertNotNull(result);
+		Assert.assertFalse(result.isPresent());
+
+		Mockito.verifyNoMoreInteractions(mockedConfiguration);
 	}
 	
-	@Test
+	@Test (expected = IllegalArgumentException.class)
 	public void testRemoveNullKey() {
-		// TODO: Not implemented
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		underTest.remove(KEY_NULL);
 	}
 	
 	@Test
 	public void testRemoveNoEntry() {
-		// TODO: Not implemented
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		underTest.put(KEY_1, VALUE_1);
+		underTest.put(KEY_3, VALUE_3);
+
+		underTest.remove(KEY_2);
+		Optional result = underTest.get(KEY_2);
+		Assert.assertNotNull(result);
+		Assert.assertFalse(result.isPresent());
+
+		Mockito.verifyNoMoreInteractions(mockedConfiguration);
 	}
 	
 	// evict
 	
 	@Test
 	public void testEvictSuccess() {
-		// TODO: Not implemented
+		final Policy mockedPolicy = Mockito.mock(Policy.class);
+		Mockito.when(mockedPolicy.evaluate(ArgumentMatchers.any(Entry.class)))
+				.thenReturn(true);
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		Mockito.when(mockedConfiguration.getEvictionPolicy())
+				.thenReturn(mockedPolicy);
+
+		final InternalCacheSimple<String, String> underTest;
+		underTest = new InternalCacheSimple<>(mockedConfiguration);
+		underTest.put(KEY_1, VALUE_1);
+		underTest.put(KEY_2, VALUE_2);
+		underTest.put(KEY_3, VALUE_3);
+
+		underTest.evict();
+
+		Map<String, Entry<String>> entries = underTest.entries();
+		Assert.assertNotNull(entries);
+		Assert.assertEquals(0, entries.size());
+
+		Mockito.verify(mockedConfiguration, Mockito.times(1))
+				.getEvictionPolicy();
+		Mockito.verify(mockedPolicy, Mockito.times(3))
+				.evaluate(ArgumentMatchers.any(Entry.class));
+
+		Mockito.verifyNoMoreInteractions(mockedConfiguration, mockedPolicy);
 	}
 	
 	@Test
 	public void testEvictNoEntries() {
-		// TODO: Not implemented
+		final Policy mockedPolicy = Mockito.mock(Policy.class);
+		Mockito.when(mockedPolicy.evaluate(ArgumentMatchers.any(Entry.class)))
+				.thenReturn(true);
+		final CacheConfiguration mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		Mockito.when(mockedConfiguration.getEvictionPolicy())
+				.thenReturn(mockedPolicy);
+
+		final InternalCacheSimple<String, String> underTest;
+		underTest = new InternalCacheSimple<>(mockedConfiguration);
+		underTest.evict();
+
+		Map<String, Entry<String>> entries = underTest.entries();
+		Assert.assertNotNull(entries);
+		Assert.assertEquals(0, entries.size());
+
+		Mockito.verify(mockedConfiguration, Mockito.times(1))
+				.getEvictionPolicy();
+
+		Mockito.verifyNoMoreInteractions(mockedConfiguration, mockedPolicy);
 	}
 }
