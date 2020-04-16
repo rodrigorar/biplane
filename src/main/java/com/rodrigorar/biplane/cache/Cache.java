@@ -16,8 +16,24 @@ limitations under the License.
 
 package com.rodrigorar.biplane.cache;
 
-public interface Cache<K, V> {
-	void put(K key, V value);
-	V get(K key);
-	void remove(K key);
+import java.util.Optional;
+
+public class Cache<K, V> {
+	private final InternalCache<K, V> _internalCache;
+
+	public Cache(InternalCache<K, V> internalCache) {
+		_internalCache = internalCache;
+	}
+
+	public void put(K key, V value) {
+		_internalCache.put(key, new Entry<>(value));
+	}
+
+	public Optional<V> get(K key) {
+		return _internalCache.get(key).map(Entry::value);
+	}
+
+	public void remove(K key) {
+		_internalCache.remove(key);
+	}
 }
