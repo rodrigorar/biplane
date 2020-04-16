@@ -17,7 +17,6 @@ limitations under the License.
 package com.rodrigorar.biplane.cache;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -66,7 +65,6 @@ class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 	@Override
 	public void evict() {
 		Policy<V> evictionPolicy = _configuration.getEvictionPolicy();
-		Set<Map.Entry<K, Entry<V>>> entrySet = _entryMap.entrySet();
 		_entryMap.forEach((k, v) -> {
 			if (evictionPolicy.evaluate(v)) {
 				_entryMap.remove(k);
