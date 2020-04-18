@@ -175,7 +175,7 @@ public class TestInternalCacheLoading {
 				.thenReturn(true);
 		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
 		Mockito.when(mockedConfiguration.getEvictionPolicy())
-				.thenReturn(mockedPolicy);
+				.thenReturn(Optional.of(mockedPolicy));
 
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;
@@ -205,7 +205,7 @@ public class TestInternalCacheLoading {
 				.thenReturn(true);
 		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
 		Mockito.when(mockedConfiguration.getEvictionPolicy())
-				.thenReturn(mockedPolicy);
+				.thenReturn(Optional.of(mockedPolicy));
 
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;

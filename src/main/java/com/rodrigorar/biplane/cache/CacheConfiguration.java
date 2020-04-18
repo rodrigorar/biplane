@@ -18,20 +18,32 @@ package com.rodrigorar.biplane.cache;
 
 import com.rodrigorar.biplane.eviction.Policy;
 
+import java.util.Optional;
+
 class CacheConfiguration<V> {
 	private Policy<V> _evictionPolicy;
-	private int _maxEntries;
+	private Integer _maxEntries;
 	
 	CacheConfiguration(Policy<V> evictionPolicy, int maxEntries) {
 		_evictionPolicy = evictionPolicy;
 		_maxEntries = maxEntries;
 	}
+
+	CacheConfiguration(Policy<V> evictionPolicy) {
+		_evictionPolicy = evictionPolicy;
+	}
+
+	CacheConfiguration(int maxEntries) {
+		_maxEntries = maxEntries;
+	}
+
+	CacheConfiguration() { /* Default Constructor */ }
 	
-	Policy<V> getEvictionPolicy() {
-		return _evictionPolicy;
+	Optional<Policy<V>> getEvictionPolicy() {
+		return Optional.ofNullable(_evictionPolicy);
 	}
 	
-	int getMaxEntries() {
-		return _maxEntries;
+	Optional<Integer> getMaxEntries() {
+		return Optional.ofNullable(_maxEntries);
 	}
 }

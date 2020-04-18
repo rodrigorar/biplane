@@ -25,5 +25,5 @@ public interface InternalCache<K, V> {
 	void remove(K key);
 	void evict();
 	Map<K, Entry<V>> entries();
-	CacheConfiguration getConfiguration();
+	CacheConfiguration<V> getConfiguration();
 }

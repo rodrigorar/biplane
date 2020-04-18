@@ -16,7 +16,6 @@
 
 package com.rodrigorar.biplane.cache;
 
-import com.rodrigorar.biplane.eviction.Policy;
 import com.rodrigorar.biplane.utils.Validator;
 
 import java.util.Map;
@@ -26,7 +25,7 @@ import java.util.function.Function;
 
 class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 	private final Map<K, Entry<V>> _entryMap;
-	private final CacheConfiguration _configuration;
+	private final CacheConfiguration<V> _configuration;
 	private final Function<K, V> _cacheLoader;
 
 	InternalCacheLoading(CacheConfiguration configuration, Function<K, V> cacheLoader) {
@@ -68,12 +67,13 @@ class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 
 	@Override
 	public void evict() {
-		Policy<V> evictionPolicy = _configuration.getEvictionPolicy();
-		_entryMap.forEach((k, v) -> {
-			if (evictionPolicy.evaluate(v)) {
-				_entryMap.remove(k);
-			}
-		});
+		_configuration.getEvictionPolicy()
+				.ifPresent(policy ->
+					_entryMap.forEach((k, v) -> {
+						if (policy.evaluate(v)) {
+							_entryMap.remove(k);
+						}
+					}));
 	}
 
 	@Override
@@ -82,7 +82,7 @@ class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 	}
 
 	@Override
-	public CacheConfiguration getConfiguration() {
+	public CacheConfiguration<V> getConfiguration() {
 		return _configuration;
 	}
 }

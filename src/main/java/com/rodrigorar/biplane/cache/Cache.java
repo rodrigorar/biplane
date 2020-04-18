@@ -36,4 +36,8 @@ public class Cache<K, V> {
 	public void remove(K key) {
 		_internalCache.remove(key);
 	}
+
+	InternalCache<K, V> getInternalCache() {
+		return _internalCache;
+	}
 }
