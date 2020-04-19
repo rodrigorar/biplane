@@ -23,18 +23,18 @@ public class Entry<V> {
 	private final Instant _creationTime;
 	private Instant _lastAccessTime;
 	
-	public Entry(V value) {
+	Entry(V value) {
 		_value = value;
 		_creationTime = Instant.now();
 		_lastAccessTime = Instant.now();
 	}
 	
-	public V value() {
+	V value() {
 		_lastAccessTime = Instant.now();
 		return _value;
 	}
 	
-	public Instant getCreationTime() {
+	Instant getCreationTime() {
 		return _creationTime;
 	}
 	
