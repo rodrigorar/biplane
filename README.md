@@ -4,6 +4,11 @@ Biplane is meant to be a simple library that allows to create and use simple in 
 
 ## Usage
 
+Has of right now, the only way to install Biplane in a project is to download the source code and install the project in your own local maven repository.
+Dependencies needed:
+  - Maven: 3.6.x
+  - Java: 1.8
+
 ## Cache Types
 
 Biplane currently supports two types of caches, the Simple Cache witch is a cache that is 100% controlled by the client, that means to all entries in the cache have to be explicitly managed by the client, except if a eviction policy is defined, then the cache will evict entries that match the eviction policy, but that is about when it comes to automatic entry management.
