@@ -27,48 +27,31 @@ public class TestCacheBuilder {
 	static final int MAX_ENTRIES = 100;
 
 	@Test
-	public void buildSimpleCacheNoPolicy() {
-		CacheBuilder<String, String> builder = new CacheBuilder<>();
-		Cache<String, String> result = builder.build();
-		Assert.assertNotNull(result);
-		InternalCache<String, String> internalCache = result.getInternalCache();
-		Assert.assertTrue(InternalCacheSimple.class.isInstance(internalCache));
-	}
-
-	@Test
 	public void buildSimpleCacheWithPolicy() {
 		CacheBuilder<String, String> builder = new CacheBuilder<>();
 		builder.timeToLive(TIME_TO_LIVE);
+		builder.maxEntries(MAX_ENTRIES);
 		Cache<String, String> result = builder.build();
 		Assert.assertNotNull(result);
 		InternalCache<String, String> internalCache = result.getInternalCache();
 		Assert.assertTrue(InternalCacheSimple.class.isInstance(internalCache));
-		CacheConfigurationGeneral<String> configuration = internalCache.getConfiguration();
+		CacheConfigurationSimple<String, String> configuration = internalCache.getConfiguration();
 		Assert.assertNotNull(configuration);
-		Assert.assertTrue(configuration.getEvictionPolicy().isPresent());
-	}
-
-	@Test
-	public void buildLoadingCacheNoPolicy() {
-		CacheBuilder<String, String> builder = new CacheBuilder<>();
-		builder.cacheLoader(value -> value);
-		Cache<String, String> result = builder.build();
-		Assert.assertNotNull(result);
-		InternalCache<String, String> internalCache = result.getInternalCache();
-		Assert.assertTrue(InternalCacheLoading.class.isInstance(internalCache));
+		Assert.assertTrue(configuration.getEvictionPolicy() != null);
 	}
 
 	@Test
 	public void buildLoadingCacheWithPolicy() {
 		CacheBuilder<String, String> builder = new CacheBuilder<>();
 		builder.timeToLive(TIME_TO_LIVE);
+		builder.maxEntries(MAX_ENTRIES);
 		builder.cacheLoader(value -> value);
 		Cache<String, String> result = builder.build();
 		Assert.assertNotNull(result);
 		InternalCache<String, String> internalCache = result.getInternalCache();
 		Assert.assertTrue(InternalCacheLoading.class.isInstance(internalCache));
-		CacheConfigurationGeneral<String> configuration = internalCache.getConfiguration();
+		CacheConfigurationLoading<String, String> configuration = internalCache.getConfiguration();
 		Assert.assertNotNull(configuration);
-		Assert.assertTrue(configuration.getEvictionPolicy().isPresent());
+		Assert.assertTrue(configuration.getEvictionPolicy() != null);
 	}
 }

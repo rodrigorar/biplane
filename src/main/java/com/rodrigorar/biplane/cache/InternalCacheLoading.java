@@ -16,22 +16,20 @@
 
 package com.rodrigorar.biplane.cache;
 
+import com.rodrigorar.biplane.eviction.Policy;
 import com.rodrigorar.biplane.utils.Validator;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 	private final Map<K, Entry<V>> _entryMap;
-	private final CacheConfigurationGeneral<V> _configuration;
-	private final Function<K, V> _cacheLoader;
+	private final CacheConfigurationLoading<K, V> _configuration;
 
-	InternalCacheLoading(CacheConfigurationGeneral configuration, Function<K, V> cacheLoader) {
+	InternalCacheLoading(CacheConfigurationLoading configuration) {
 		_entryMap = new ConcurrentHashMap<>();
 		_configuration = configuration;
-		_cacheLoader = cacheLoader;
 	}
 
 	@Override
@@ -47,12 +45,11 @@ class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 		Validator.isNotNull(key);
 
 		if (! _entryMap.containsKey(key)) {
-			V loadedValue = _cacheLoader.apply(key);
+			V loadedValue = _configuration.getCacheLoader().apply(key);
 			if (loadedValue != null) {
 				_entryMap.put(key, new Entry<>(loadedValue));
 			}
 		}
-
 		return Optional.ofNullable(_entryMap.get(key));
 	}
 
@@ -67,13 +64,12 @@ class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 
 	@Override
 	public void evict() {
-		_configuration.getEvictionPolicy()
-				.ifPresent(policy ->
-					_entryMap.forEach((k, v) -> {
-						if (policy.evaluate(v)) {
-							_entryMap.remove(k);
-						}
-					}));
+		Policy<V> evictionPolicy = _configuration.getEvictionPolicy();
+		_entryMap.forEach((k, v) -> {
+			if (evictionPolicy.evaluate(v)) {
+				_entryMap.remove(k);
+			}
+		});
 	}
 
 	@Override
@@ -82,7 +78,7 @@ class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 	}
 
 	@Override
-	public CacheConfigurationGeneral<V> getConfiguration() {
+	public CacheConfigurationLoading<K, V> getConfiguration() {
 		return _configuration;
 	}
 }

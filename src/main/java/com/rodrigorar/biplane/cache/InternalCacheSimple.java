@@ -16,6 +16,7 @@
 
 package com.rodrigorar.biplane.cache;
 
+import com.rodrigorar.biplane.eviction.Policy;
 import com.rodrigorar.biplane.utils.Validator;
 
 import java.util.Map;
@@ -24,9 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 	private final Map<K, Entry<V>> _entryMap;
-	private final CacheConfigurationGeneral<V> _configuration;
+	private final CacheConfigurationSimple<K, V> _configuration;
 	
-	InternalCacheSimple(CacheConfigurationGeneral<V> configuration) {
+	InternalCacheSimple(CacheConfigurationSimple<K, V> configuration) {
 		_entryMap = new ConcurrentHashMap<>();
 		_configuration = configuration;
 	}
@@ -63,13 +64,12 @@ class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 	
 	@Override
 	public void evict() {
-		_configuration.getEvictionPolicy()
-				.ifPresent(policy ->
-					_entryMap.forEach((k, v) -> {
-						if (policy.evaluate(v)) {
-							_entryMap.remove(k);
-						}
-					}));
+		Policy<V> evictionPolicy = _configuration.getEvictionPolicy();
+		_entryMap.forEach((k, v) -> {
+			if (evictionPolicy.evaluate(v)) {
+				_entryMap.remove(k);
+			}
+		});
 	}
 	
 	@Override
@@ -78,7 +78,7 @@ class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 	}
 	
 	@Override
-	public CacheConfigurationGeneral<V> getConfiguration() {
+	public CacheConfigurationSimple<K, V> getConfiguration() {
 		return _configuration;
 	}
 }

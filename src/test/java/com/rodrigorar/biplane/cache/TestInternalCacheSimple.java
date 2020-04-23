@@ -39,8 +39,8 @@ public class TestInternalCacheSimple {
 	
 	@Test
 	public void testPutSuccess() {
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
-		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
+		final InternalCacheSimple<String, String> underTest = new InternalCacheSimple<>(mockedConfiguration);
 		underTest.put(KEY_1, VALUE_1);
 		underTest.put(KEY_2, VALUE_2);
 		underTest.put(KEY_3, VALUE_3);
@@ -65,15 +65,15 @@ public class TestInternalCacheSimple {
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testPutNullKey() {
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
-		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
+		final InternalCacheSimple<String, String> underTest = new InternalCacheSimple<>(mockedConfiguration);
 		underTest.put(KEY_NULL, VALUE_1);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testPutNullValue() {
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
-		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
+		final InternalCacheSimple<String, String> underTest = new InternalCacheSimple<>(mockedConfiguration);
 		underTest.put(KEY_1, VALUE_NULL);
 	}
 	
@@ -81,15 +81,15 @@ public class TestInternalCacheSimple {
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testGetNullKey() {
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
-		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
+		final InternalCacheSimple<String, String> underTest = new InternalCacheSimple<String, String>(mockedConfiguration);
 		underTest.get(KEY_NULL);
 	}
 	
 	@Test
 	public void testGetNoEntry() {
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
-		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
+		final InternalCacheSimple<String, String> underTest = new InternalCacheSimple<>(mockedConfiguration);
 		Optional<Entry<String>> result = underTest.get(KEY_1);
 
 		Assert.assertNotNull(result);
@@ -100,8 +100,8 @@ public class TestInternalCacheSimple {
 	
 	@Test
 	public void testRemoveSuccess() {
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
-		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
+		final InternalCacheSimple<String, String> underTest = new InternalCacheSimple<>(mockedConfiguration);
 		underTest.put(KEY_1, VALUE_1);
 		underTest.put(KEY_2, VALUE_2);
 		underTest.put(KEY_3, VALUE_3);
@@ -121,15 +121,15 @@ public class TestInternalCacheSimple {
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testRemoveNullKey() {
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
-		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
+		final InternalCacheSimple<String, String> underTest = new InternalCacheSimple<>(mockedConfiguration);
 		underTest.remove(KEY_NULL);
 	}
 	
 	@Test
 	public void testRemoveNoEntry() {
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
-		final InternalCacheSimple underTest = new InternalCacheSimple(mockedConfiguration);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
+		final InternalCacheSimple<String, String> underTest = new InternalCacheSimple<>(mockedConfiguration);
 		underTest.put(KEY_1, VALUE_1);
 		underTest.put(KEY_3, VALUE_3);
 
@@ -145,12 +145,12 @@ public class TestInternalCacheSimple {
 	
 	@Test
 	public void testEvictSuccess() {
-		final Policy mockedPolicy = Mockito.mock(Policy.class);
+		final Policy<String> mockedPolicy = Mockito.mock(Policy.class);
 		Mockito.when(mockedPolicy.evaluate(ArgumentMatchers.any(Entry.class)))
 				.thenReturn(true);
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
 		Mockito.when(mockedConfiguration.getEvictionPolicy())
-				.thenReturn(Optional.of(mockedPolicy));
+				.thenReturn(mockedPolicy);
 
 		final InternalCacheSimple<String, String> underTest;
 		underTest = new InternalCacheSimple<>(mockedConfiguration);
@@ -174,12 +174,12 @@ public class TestInternalCacheSimple {
 	
 	@Test
 	public void testEvictNoEntries() {
-		final Policy mockedPolicy = Mockito.mock(Policy.class);
+		final Policy<String> mockedPolicy = Mockito.mock(Policy.class);
 		Mockito.when(mockedPolicy.evaluate(ArgumentMatchers.any(Entry.class)))
 				.thenReturn(true);
-		final CacheConfigurationGeneral mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
+		final CacheConfigurationSimple<String, String> mockedConfiguration = Mockito.mock(CacheConfigurationSimple.class);
 		Mockito.when(mockedConfiguration.getEvictionPolicy())
-				.thenReturn(Optional.of(mockedPolicy));
+				.thenReturn(mockedPolicy);
 
 		final InternalCacheSimple<String, String> underTest;
 		underTest = new InternalCacheSimple<>(mockedConfiguration);

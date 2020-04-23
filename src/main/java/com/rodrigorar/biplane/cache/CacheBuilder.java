@@ -17,6 +17,7 @@
 package com.rodrigorar.biplane.cache;
 
 import com.rodrigorar.biplane.eviction.FactoryPolicy;
+import com.rodrigorar.biplane.utils.Validator;
 
 import java.time.Duration;
 import java.util.function.Function;
@@ -41,32 +42,41 @@ public class CacheBuilder<K, V> {
 		return this;
 	}
 
-	private CacheConfigurationGeneral<V> buildConfiguration() {
-		final CacheConfigurationGeneral<V> configuration;
-		if (_maxEntries != null && _timeToLive != null) {
-			configuration = new CacheConfigurationGeneral<>(FactoryPolicy.timeBased(_timeToLive), _maxEntries);
-		} else if (_maxEntries != null && _timeToLive == null) {
-			configuration = new CacheConfigurationGeneral<>(_maxEntries);
-		} else if (_maxEntries == null && _timeToLive != null) {
-			configuration = new CacheConfigurationGeneral<>(FactoryPolicy.timeBased(_timeToLive));
+	private CacheConfiguration<K, V> buildConfiguration() {
+		final CacheConfiguration<K, V> result;
+		if (_cacheLoader != null) {
+			result =
+					new CacheConfigurationLoading<>(
+							FactoryPolicy.timeBased(_timeToLive),
+							_cacheLoader,
+							_maxEntries);
 		} else {
-			configuration = new CacheConfigurationGeneral<>();
+			result =
+					new CacheConfigurationSimple<>(
+							FactoryPolicy.timeBased(_timeToLive),
+							_maxEntries);
 		}
-		return configuration;
+		return result;
 	}
 
-	private InternalCache<K, V> buildInternalCache(CacheConfigurationGeneral<V> configuration) {
+	private InternalCache<K, V> buildInternalCache(CacheConfiguration<K, V> configuration) {
 		final InternalCache<K, V> internalCache;
-		if (_cacheLoader != null) {
-			internalCache = new InternalCacheLoading<>(configuration, _cacheLoader);
+		if (CacheConfigurationLoading.class.isInstance(configuration)) {
+			internalCache = new InternalCacheLoading<>(configuration.subCast());
 		} else {
-			internalCache = new InternalCacheSimple<>(configuration);
+			internalCache = new InternalCacheSimple<>(configuration.subCast());
 		}
 		return internalCache;
 	}
 
+	private void validateFields() {
+		Validator.isNotNull(_timeToLive);
+		Validator.isNotNull(_maxEntries);
+	}
+
 	public Cache<K, V> build() {
-		CacheConfigurationGeneral<V> configuration = buildConfiguration();
+		validateFields();
+		CacheConfiguration<K, V> configuration = buildConfiguration();
 		InternalCache<K, V> internalCache = buildInternalCache(configuration);
 		return new Cache<>(internalCache);
 	}
