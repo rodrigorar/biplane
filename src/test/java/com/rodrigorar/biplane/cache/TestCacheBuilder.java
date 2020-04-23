@@ -43,7 +43,7 @@ public class TestCacheBuilder {
 		Assert.assertNotNull(result);
 		InternalCache<String, String> internalCache = result.getInternalCache();
 		Assert.assertTrue(InternalCacheSimple.class.isInstance(internalCache));
-		CacheConfiguration<String> configuration = internalCache.getConfiguration();
+		CacheConfigurationGeneral<String> configuration = internalCache.getConfiguration();
 		Assert.assertNotNull(configuration);
 		Assert.assertTrue(configuration.getEvictionPolicy().isPresent());
 	}
@@ -67,7 +67,7 @@ public class TestCacheBuilder {
 		Assert.assertNotNull(result);
 		InternalCache<String, String> internalCache = result.getInternalCache();
 		Assert.assertTrue(InternalCacheLoading.class.isInstance(internalCache));
-		CacheConfiguration<String> configuration = internalCache.getConfiguration();
+		CacheConfigurationGeneral<String> configuration = internalCache.getConfiguration();
 		Assert.assertNotNull(configuration);
 		Assert.assertTrue(configuration.getEvictionPolicy().isPresent());
 	}

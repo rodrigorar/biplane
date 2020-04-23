@@ -25,10 +25,10 @@ import java.util.function.Function;
 
 class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 	private final Map<K, Entry<V>> _entryMap;
-	private final CacheConfiguration<V> _configuration;
+	private final CacheConfigurationGeneral<V> _configuration;
 	private final Function<K, V> _cacheLoader;
 
-	InternalCacheLoading(CacheConfiguration configuration, Function<K, V> cacheLoader) {
+	InternalCacheLoading(CacheConfigurationGeneral configuration, Function<K, V> cacheLoader) {
 		_entryMap = new ConcurrentHashMap<>();
 		_configuration = configuration;
 		_cacheLoader = cacheLoader;
@@ -82,7 +82,7 @@ class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 	}
 
 	@Override
-	public CacheConfiguration<V> getConfiguration() {
+	public CacheConfigurationGeneral<V> getConfiguration() {
 		return _configuration;
 	}
 }

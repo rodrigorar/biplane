@@ -41,7 +41,7 @@ public class TestInternalCacheLoading {
 
 	@Test
 	public void testPutSuccess() {
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;
 		underTest = new InternalCacheLoading<>(mockedConfiguration, mockedCacheLoader);
@@ -69,7 +69,7 @@ public class TestInternalCacheLoading {
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testPutNullKey() {
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;
 		underTest = new InternalCacheLoading<>(mockedConfiguration, mockedCacheLoader);
@@ -78,7 +78,7 @@ public class TestInternalCacheLoading {
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testPutNullValue() {
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;
 		underTest = new InternalCacheLoading<>(mockedConfiguration, mockedCacheLoader);
@@ -89,7 +89,7 @@ public class TestInternalCacheLoading {
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testGetNullKey() {
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;
 		underTest = new InternalCacheLoading<>(mockedConfiguration, mockedCacheLoader);
@@ -98,7 +98,7 @@ public class TestInternalCacheLoading {
 
 	@Test
 	public void testGetNoEntry() {
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		Mockito.when(mockedCacheLoader.apply(ArgumentMatchers.any()))
 				.thenReturn(LOADED_VALUE);
@@ -119,7 +119,7 @@ public class TestInternalCacheLoading {
 
 	@Test
 	public void testRemoveSuccess() {
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;
 		underTest = new InternalCacheLoading<>(mockedConfiguration, mockedCacheLoader);
@@ -142,7 +142,7 @@ public class TestInternalCacheLoading {
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testRemoveNullKey() {
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;
 		underTest = new InternalCacheLoading<>(mockedConfiguration, mockedCacheLoader);
@@ -151,7 +151,7 @@ public class TestInternalCacheLoading {
 
 	@Test
 	public void testRemoveNoEntry() {
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		final Function<String, String> mockedCacheLoader = Mockito.mock(Function.class);
 		final InternalCacheLoading<String, String> underTest;
 		underTest = new InternalCacheLoading<>(mockedConfiguration, mockedCacheLoader);
@@ -173,7 +173,7 @@ public class TestInternalCacheLoading {
 		final Policy<String> mockedPolicy = Mockito.mock(Policy.class);
 		Mockito.when(mockedPolicy.evaluate(ArgumentMatchers.any(Entry.class)))
 				.thenReturn(true);
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		Mockito.when(mockedConfiguration.getEvictionPolicy())
 				.thenReturn(Optional.of(mockedPolicy));
 
@@ -203,7 +203,7 @@ public class TestInternalCacheLoading {
 		final Policy<String> mockedPolicy = Mockito.mock(Policy.class);
 		Mockito.when(mockedPolicy.evaluate(ArgumentMatchers.any(Entry.class)))
 				.thenReturn(true);
-		final CacheConfiguration<String> mockedConfiguration = Mockito.mock(CacheConfiguration.class);
+		final CacheConfigurationGeneral<String> mockedConfiguration = Mockito.mock(CacheConfigurationGeneral.class);
 		Mockito.when(mockedConfiguration.getEvictionPolicy())
 				.thenReturn(Optional.of(mockedPolicy));
 

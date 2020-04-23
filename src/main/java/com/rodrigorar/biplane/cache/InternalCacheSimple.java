@@ -24,9 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 	private final Map<K, Entry<V>> _entryMap;
-	private final CacheConfiguration<V> _configuration;
+	private final CacheConfigurationGeneral<V> _configuration;
 	
-	InternalCacheSimple(CacheConfiguration<V> configuration) {
+	InternalCacheSimple(CacheConfigurationGeneral<V> configuration) {
 		_entryMap = new ConcurrentHashMap<>();
 		_configuration = configuration;
 	}
@@ -78,7 +78,7 @@ class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 	}
 	
 	@Override
-	public CacheConfiguration<V> getConfiguration() {
+	public CacheConfigurationGeneral<V> getConfiguration() {
 		return _configuration;
 	}
 }

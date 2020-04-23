@@ -41,21 +41,21 @@ public class CacheBuilder<K, V> {
 		return this;
 	}
 
-	private CacheConfiguration<V> buildConfiguration() {
-		final CacheConfiguration<V> configuration;
+	private CacheConfigurationGeneral<V> buildConfiguration() {
+		final CacheConfigurationGeneral<V> configuration;
 		if (_maxEntries != null && _timeToLive != null) {
-			configuration = new CacheConfiguration<>(FactoryPolicy.timeBased(_timeToLive), _maxEntries);
+			configuration = new CacheConfigurationGeneral<>(FactoryPolicy.timeBased(_timeToLive), _maxEntries);
 		} else if (_maxEntries != null && _timeToLive == null) {
-			configuration = new CacheConfiguration<>(_maxEntries);
+			configuration = new CacheConfigurationGeneral<>(_maxEntries);
 		} else if (_maxEntries == null && _timeToLive != null) {
-			configuration = new CacheConfiguration<>(FactoryPolicy.timeBased(_timeToLive));
+			configuration = new CacheConfigurationGeneral<>(FactoryPolicy.timeBased(_timeToLive));
 		} else {
-			configuration = new CacheConfiguration<>();
+			configuration = new CacheConfigurationGeneral<>();
 		}
 		return configuration;
 	}
 
-	private InternalCache<K, V> buildInternalCache(CacheConfiguration<V> configuration) {
+	private InternalCache<K, V> buildInternalCache(CacheConfigurationGeneral<V> configuration) {
 		final InternalCache<K, V> internalCache;
 		if (_cacheLoader != null) {
 			internalCache = new InternalCacheLoading<>(configuration, _cacheLoader);
@@ -66,7 +66,7 @@ public class CacheBuilder<K, V> {
 	}
 
 	public Cache<K, V> build() {
-		CacheConfiguration<V> configuration = buildConfiguration();
+		CacheConfigurationGeneral<V> configuration = buildConfiguration();
 		InternalCache<K, V> internalCache = buildInternalCache(configuration);
 		return new Cache<>(internalCache);
 	}
