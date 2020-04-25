@@ -30,7 +30,7 @@ public class FactoryCacheLoading<K, V> extends AbstractFactoryCache<K, V, CacheC
 	}
 
 	@Override
-	public Cache<K, V> build() {
+	protected Cache<K, V> doBuild() {
 		Validator.validateOrDefault(_timeToLive, Duration.ofMinutes(10));
 		Validator.validateOrDefault(_maxEntries, 100);
 		Validator.validateOrDefault(_cacheLoader, (Function) o -> null);

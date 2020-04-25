@@ -39,7 +39,7 @@ public class FactoryCacheSimple<K, V> extends AbstractFactoryCache<K, V, CacheCo
 	}
 
 	@Override
-	public Cache<K, V> build() {
+	protected Cache<K, V> doBuild() {
 		Validator.validateOrDefault(_timeToLive, Duration.ofMinutes(10));
 		Validator.validateOrDefault(_maxEntries, 100);
 

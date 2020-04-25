@@ -73,15 +73,5 @@ class InternalCacheSimple<K, V> implements InternalCache<K, V> {
 			}
 		});
 	}
-	
-	@Override
-	public Map<K, Entry<V>> entries() {
-		return _entryMap;
-	}
-	
-	@Override
-	public CacheConfigurationSimple<K, V> getConfiguration() {
-		return _configuration;
-	}
 }
 
