@@ -22,9 +22,9 @@ import com.rodrigorar.biplane.core.eviction.Policy;
 import java.util.function.Function;
 
 public class CacheConfigurationLoading<K, V> implements CacheConfiguration<K, V> {
-	private final Policy<V> _evictionPolicy;
-	private final int _maxEntries;
-	private final Function<K, V> _cacheLoader;
+	private Policy<V> _evictionPolicy;
+	private int _maxEntries;
+	private Function<K, V> _cacheLoader;
 
 	public CacheConfigurationLoading(
 			Policy<V> evictionPolicy,
@@ -41,13 +41,25 @@ public class CacheConfigurationLoading<K, V> implements CacheConfiguration<K, V>
 		return _evictionPolicy;
 	}
 
+	public void setEvictionPolicy(Policy<V> evictionPolicy) {
+		_evictionPolicy = evictionPolicy;
+	}
+
 	@Override
 	public int getMaxEntries() {
 		return _maxEntries;
 	}
 
+	public void setMaxEntries(int maxEntries) {
+		_maxEntries = maxEntries;
+	}
+
 	public Function<K, V> getCacheLoader() {
 		return _cacheLoader;
+	}
+
+	public void setCacheLoader(Function<K, V> cacheLoader) {
+		_cacheLoader = cacheLoader;
 	}
 
 	@Override
