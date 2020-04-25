@@ -16,7 +16,6 @@
 
 package com.rodrigorar.biplane.core.cache;
 
-import java.util.Map;
 import java.util.Optional;
 
 public interface InternalCache<K, V> {
@@ -24,6 +23,4 @@ public interface InternalCache<K, V> {
 	Optional<Entry<V>> get(K key);
 	void remove(K key);
 	void evict();
-	Map<K, Entry<V>> entries();
-	<C extends CacheConfiguration> C getConfiguration();
 }
