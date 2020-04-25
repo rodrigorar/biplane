@@ -29,4 +29,10 @@ public class Validator {
 			throw new IllegalArgumentException();
 		}
 	}
+
+	public static void validateOrDefault(Object value, Object defaultValue) {
+		if (value == null) {
+			value = defaultValue;
+		}
+	}
 }

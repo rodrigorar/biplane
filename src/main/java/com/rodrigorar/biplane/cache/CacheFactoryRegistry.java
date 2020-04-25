@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class CacheFactoryRegistry {
+public final class CacheFactoryRegistry {
 	private static CacheFactoryRegistry _instance;
 	private final Map<Class<?>, CacheRegistry<?, ?, ?>> _registry;
 
@@ -31,8 +31,13 @@ public class CacheFactoryRegistry {
 	public static CacheFactoryRegistry getInstance() {
 		if (_instance == null) {
 			_instance = new CacheFactoryRegistry();
+			_instance.initLibCaches();
 		}
 		return _instance;
+	}
+
+	private void initLibCaches() {
+		this.register(InternalCacheSimple.class, FactoryCacheSimple.class, CacheConfigurationSimple.class);
 	}
 
 	public <I extends InternalCache,
@@ -61,7 +66,7 @@ public class CacheFactoryRegistry {
 		return Optional.ofNullable(result);
 	}
 
-	protected class CacheRegistry<
+	private class CacheRegistry<
 			I extends InternalCache,
 			F extends AbstractFactoryCache,
 			C extends CacheConfiguration> {

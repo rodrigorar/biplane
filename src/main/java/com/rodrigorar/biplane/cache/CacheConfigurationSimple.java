@@ -19,22 +19,25 @@ package com.rodrigorar.biplane.cache;
 import com.rodrigorar.biplane.eviction.Policy;
 
 class CacheConfigurationSimple<K, V> implements CacheConfiguration<K, V> {
-	private final Policy<V> _evictionPolicy;
-	private final Integer _maxEntries;
-	
-	CacheConfigurationSimple(Policy<V> evictionPolicy, int maxEntries) {
-		_evictionPolicy = evictionPolicy;
-		_maxEntries = maxEntries;
-	}
+	private Policy<V> _evictionPolicy;
+	private Integer _maxEntries;
 
 	@Override
 	public Policy<V> getEvictionPolicy() {
 		return _evictionPolicy;
 	}
 
+	public void setEvictionPolicy(Policy<V> evictionPolicy) {
+		_evictionPolicy = evictionPolicy;
+	}
+
 	@Override
 	public int getMaxEntries() {
 		return _maxEntries;
+	}
+
+	public void setMaxEntries(int maxEntries) {
+		_maxEntries = maxEntries;
 	}
 
 	@Override
