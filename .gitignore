@@ -26,3 +26,5 @@ hs_err_pid*
 
 # Others
 biplane.iml
+biplane-core/target/*
+biplane-toolkit/target/*
