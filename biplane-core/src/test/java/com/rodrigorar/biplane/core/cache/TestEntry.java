@@ -14,29 +14,8 @@
  * limitations under the License.
  */
 
-package com.rodrigorar.biplane.core.utils;
+package com.rodrigorar.biplane.core.cache;
 
-public class Validator {
-
-	public static void isNotNull(Object value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static void isValidArgument(boolean evaluation) {
-		if (! evaluation) {
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static <T> T validateOrDefault(T value, T defaultValue) {
-		final T result;
-		if (value == null) {
-			result = defaultValue;
-		} else {
-			result = value;
-		}
-		return result;
-	}
+public class TestEntry {
+	// TODO: Not implemented
 }
