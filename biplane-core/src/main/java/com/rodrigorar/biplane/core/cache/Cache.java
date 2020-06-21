@@ -16,6 +16,7 @@
 
 package com.rodrigorar.biplane.core.cache;
 
+import com.rodrigorar.biplane.core.utils.Validator;
 import java.util.Optional;
 
 public class Cache<K, V> {
@@ -26,14 +27,21 @@ public class Cache<K, V> {
 	}
 
 	public void put(K key, V value) {
+		Validator.isNotNull(key);
+		Validator.isNotNull(value);
+
 		_internalCache.put(key, new Entry<>(value));
 	}
 
 	public Optional<V> get(K key) {
+		Validator.isNotNull(key);
+
 		return _internalCache.get(key).map(Entry::value);
 	}
 
 	public void remove(K key) {
+		Validator.isNotNull(key);
+
 		_internalCache.remove(key);
 	}
 

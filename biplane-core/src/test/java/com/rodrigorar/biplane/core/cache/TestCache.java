@@ -16,6 +16,111 @@
 
 package com.rodrigorar.biplane.core.cache;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+
+import java.util.Optional;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mockito;
+
 public class TestCache {
-	// TODO: Not implemented
+	private static final String KEY_1 = "key-1";
+	private static final String NULL_KEY = null;
+	private static final String VALUE_1 = "value-1";
+	private static final String NULL_VALUE = null;
+
+	// put
+
+	@Test
+	public void putSuccess() {
+		InternalCache<String, String> mockedInternalCache = Mockito.mock(InternalCache.class);
+
+		Cache<String, String> underTest = new Cache<>(mockedInternalCache);
+		underTest.put(KEY_1, VALUE_1);
+
+		Mockito.verify(mockedInternalCache).put(eq(KEY_1), any(Entry.class));
+
+		Mockito.verifyNoMoreInteractions(mockedInternalCache);
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void putNullKey() {
+		InternalCache<String, String> mockedInternalCache = Mockito.mock(InternalCache.class);
+
+		Cache<String, String> underTest = new Cache<>(mockedInternalCache);
+		try {
+			underTest.put(NULL_KEY, VALUE_1);
+		} finally {
+			Mockito.verifyNoMoreInteractions(mockedInternalCache);
+		}
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void putNullValue() {
+		InternalCache<String, String> mockedInternalCache = Mockito.mock(InternalCache.class);
+
+		Cache<String, String> underTest = new Cache<>(mockedInternalCache);
+		try {
+			underTest.put(KEY_1, NULL_VALUE);
+		} finally {
+			Mockito.verifyNoMoreInteractions(mockedInternalCache);
+		}
+	}
+
+	// get
+
+	@Test
+	public void getSuccess() {
+		InternalCache<String, String> mockedInternalCache = Mockito.mock(InternalCache.class);
+		Mockito.when(mockedInternalCache.get(eq(KEY_1))).thenReturn(Optional.of(new Entry<>(VALUE_1)));
+
+		Cache<String, String> underTest = new Cache<>(mockedInternalCache);
+		Optional<String> result = underTest.get(KEY_1);
+
+		Assert.assertTrue(result.isPresent());
+		Assert.assertEquals(VALUE_1, result.get());
+
+		Mockito.verify(mockedInternalCache).get(eq(KEY_1));
+
+		Mockito.verifyNoMoreInteractions(mockedInternalCache);
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void getNullKey() {
+		InternalCache<String, String> mockedInternalCache = Mockito.mock(InternalCache.class);
+
+		Cache<String, String> underTest = new Cache<>(mockedInternalCache);
+		try {
+			underTest.get(NULL_KEY);
+		} finally {
+			Mockito.verifyNoMoreInteractions(mockedInternalCache);
+		}
+	}
+
+	// remove
+
+	@Test
+	public void removeSuccess() {
+		InternalCache<String, String> mockedInternalCache = Mockito.mock(InternalCache.class);
+
+		Cache<String, String> underTest = new Cache<>(mockedInternalCache);
+		underTest.remove(KEY_1);
+
+		Mockito.verify(mockedInternalCache).remove(eq(KEY_1));
+
+		Mockito.verifyNoMoreInteractions(mockedInternalCache);
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void removeNullKey() {
+		InternalCache<String, String> mockedInternalCache = Mockito.mock(InternalCache.class);
+
+		Cache<String, String> underTest = new Cache<>(mockedInternalCache);
+		try {
+			underTest.remove(NULL_KEY);
+		} finally {
+			Mockito.verifyNoMoreInteractions(mockedInternalCache);
+		}
+	}
 }
