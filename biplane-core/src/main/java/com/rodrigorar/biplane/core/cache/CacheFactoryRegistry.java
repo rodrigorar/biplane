@@ -35,16 +35,16 @@ public final class CacheFactoryRegistry {
 		return _instance;
 	}
 
-	public synchronized <I extends InternalCache,
-			F extends AbstractFactoryCache,
-			C extends CacheConfiguration> void register(Class<I> cache, Class<F> factory, Class<C> configuration) {
+	public synchronized <I extends InternalCache<?, ?>,
+			F extends AbstractFactoryCache<?, ?, C>,
+			C extends CacheConfiguration<?, ?>> void register(Class<I> cache, Class<F> factory, Class<C> configuration) {
 		CacheRegistry<I, F, C> register = new CacheRegistry<>(cache, factory, configuration);
 		_registry.put(cache, register);
 	}
 
-	public <I extends InternalCache,
-			F extends AbstractFactoryCache,
-			C extends CacheConfiguration> Optional<F> factory(Class<I> clazz) {
+	public <I extends InternalCache<?, ?>,
+			F extends AbstractFactoryCache<?, ?, C>,
+			C extends CacheConfiguration<?, ?>> Optional<F> factory(Class<I> clazz) {
 		CacheRegistry<?, ?, ?> register = _registry.get(clazz);
 		F result = null;
 		if (register != null) {
@@ -61,10 +61,10 @@ public final class CacheFactoryRegistry {
 		return Optional.ofNullable(result);
 	}
 
-	private class CacheRegistry<
-			I extends InternalCache,
-			F extends AbstractFactoryCache,
-			C extends CacheConfiguration> {
+	private static class CacheRegistry<
+			I extends InternalCache<?, ?>,
+			F extends AbstractFactoryCache<?, ?, C>,
+			C extends CacheConfiguration<?, ?>> {
 		private final Class<I> _cache;
 		private final Class<F> _factory;
 		private final Class<C> _configuration;
