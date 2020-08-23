@@ -40,9 +40,4 @@ class CacheConfigurationSimple<K, V> implements CacheConfiguration<K, V> {
 	public void setMaxEntries(int maxEntries) {
 		_maxEntries = maxEntries;
 	}
-
-	@Override
-	public CacheConfigurationSimple subCast() {
-		return this;
-	}
 }

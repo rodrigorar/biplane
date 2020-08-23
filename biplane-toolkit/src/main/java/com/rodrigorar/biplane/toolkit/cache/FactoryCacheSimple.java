@@ -24,16 +24,16 @@ import com.rodrigorar.biplane.core.utils.Validator;
 
 import java.time.Duration;
 
-public class FactoryCacheSimple<K, V> extends AbstractFactoryCache<K, V, CacheConfigurationSimple> {
+public class FactoryCacheSimple<K, V> extends AbstractFactoryCache<K, V, CacheConfigurationSimple<K, V>> {
 	private Duration _timeToLive;
 	private Integer _maxEntries;
 
-	public FactoryCacheSimple timeToLive(Duration timeToLive) {
+	public FactoryCacheSimple<K, V> timeToLive(Duration timeToLive) {
 		_timeToLive = timeToLive;
 		return this;
 	}
 
-	public FactoryCacheSimple maxEntries(int maxEntries) {
+	public FactoryCacheSimple<K, V> maxEntries(int maxEntries) {
 		_maxEntries = maxEntries;
 		return this;
 	}
@@ -46,6 +46,6 @@ public class FactoryCacheSimple<K, V> extends AbstractFactoryCache<K, V, CacheCo
 		_configuration.setEvictionPolicy(FactoryPolicy.timeBased(_timeToLive));
 		_configuration.setMaxEntries(_maxEntries);
 		InternalCache<K, V> internal = new InternalCacheSimple<K, V>(_configuration);
-		return new Cache(internal);
+		return new Cache<K, V>(internal);
 	}
 }

@@ -25,22 +25,22 @@ import com.rodrigorar.biplane.toolkit.policy.FactoryPolicy;
 import java.time.Duration;
 import java.util.function.Function;
 
-public class FactoryCacheLoading<K, V> extends AbstractFactoryCache<K, V, CacheConfigurationLoading> {
+public class FactoryCacheLoading<K, V> extends AbstractFactoryCache<K, V, CacheConfigurationLoading<K, V>> {
 	private Duration _timeToLive;
 	private Integer _maxEntries;
 	private Function<K, V> _cacheLoader;
 
-	public FactoryCacheLoading timeToLive(Duration timeToLive) {
+	public FactoryCacheLoading<K, V> timeToLive(Duration timeToLive) {
 		_timeToLive = timeToLive;
 		return this;
 	}
 
-	public FactoryCacheLoading maxEntries(int maxEntries) {
+	public FactoryCacheLoading<K, V> maxEntries(int maxEntries) {
 		_maxEntries = maxEntries;
 		return this;
 	}
 
-	public FactoryCacheLoading cacheLoader(Function<K, V> cacheLoader) {
+	public FactoryCacheLoading<K, V> cacheLoader(Function<K, V> cacheLoader) {
 		_cacheLoader = cacheLoader;
 		return this;
 	}
@@ -49,7 +49,7 @@ public class FactoryCacheLoading<K, V> extends AbstractFactoryCache<K, V, CacheC
 	protected Cache<K, V> doBuild() {
 		Validator.validateOrDefault(_timeToLive, Duration.ofMinutes(10));
 		Validator.validateOrDefault(_maxEntries, 100);
-		Validator.validateOrDefault(_cacheLoader, (Function) o -> null);
+		Validator.validateOrDefault(_cacheLoader, o -> null);
 
 		_configuration.setEvictionPolicy(FactoryPolicy.timeBased(_timeToLive));
 		_configuration.setMaxEntries(_maxEntries);

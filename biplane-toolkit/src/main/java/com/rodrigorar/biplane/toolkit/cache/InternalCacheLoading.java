@@ -29,7 +29,7 @@ class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 	private final Map<K, Entry<V>> _entryMap;
 	private final CacheConfigurationLoading<K, V> _configuration;
 
-	InternalCacheLoading(CacheConfigurationLoading configuration) {
+	InternalCacheLoading(CacheConfigurationLoading<K, V> configuration) {
 		_entryMap = new ConcurrentHashMap<>();
 		_configuration = configuration;
 	}
@@ -58,10 +58,7 @@ class InternalCacheLoading<K, V> implements InternalCache<K, V> {
 	@Override
 	public void remove(K key) {
 		Validator.isNotNull(key);
-
-		if (_entryMap.containsKey(key)) {
-			_entryMap.remove(key);
-		}
+		_entryMap.remove(key);
 	}
 
 	@Override
