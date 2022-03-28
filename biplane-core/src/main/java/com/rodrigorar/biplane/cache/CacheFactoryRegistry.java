@@ -34,7 +34,7 @@ public final class CacheFactoryRegistry {
 		}
 		return _instance;
 	}
-
+	
 	public synchronized <I extends InternalCache<?, ?>,
 			F extends AbstractFactoryCache<?, ?, C>,
 			C extends CacheConfiguration<?, ?>> void register(Class<I> cache, Class<F> factory, Class<C> configuration) {

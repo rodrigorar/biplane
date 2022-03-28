@@ -40,7 +40,6 @@ public class TestCache {
 		underTest.put(KEY_1, VALUE_1);
 
 		Mockito.verify(mockedInternalCache).put(eq(KEY_1), any(Entry.class));
-
 		Mockito.verifyNoMoreInteractions(mockedInternalCache);
 	}
 
